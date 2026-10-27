@@ -790,7 +790,7 @@
         cleanPhone = '55' + cleanPhone;
       }
       const formattedDate = new Date(bookingDate + 'T00:00:00').toLocaleDateString('pt-BR');
-      const message = `Olá, ${clientName}! Aqui é do salão NEXSITE sobre o seu agendamento (${bookingId}) para o dia ${formattedDate} às ${bookingTime}. Estamos entrando em contato...`;
+      const message = `Olá, ${clientName}! Aqui é do salão NEXSITE sobre o seu agendamento (${bookingId}) para o dia ${formattedDate} às ${bookingTime}. Estamos entrando em contato pra confirmar seu agendamento, caso queira cancelar avise atencipadamente! obrigado :) `;
       window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
     }
 
