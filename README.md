@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -377,7 +377,7 @@
         <p class="text-xs text-gray-400 mt-1">Digite a senha administrativa para acessar</p>
       </div>
       <div>
-        <input type="password" id="admin-password-input" placeholder="Senha (padrão:2026)" class="w-full text-center bg-gray-900 border border-gray-800 rounded-xl p-3 text-sm text-white focus:border-amber-500 focus:outline-none tracking-widest">
+        <input type="password" id="admin-password-input" placeholder="Senha (digitesuasenha)" class="w-full text-center bg-gray-900 border border-gray-800 rounded-xl p-3 text-sm text-white focus:border-amber-500 focus:outline-none tracking-widest">
       </div>
       <div class="flex gap-2">
         <button onclick="closeAdminModal()" class="w-1/2 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-xs">Cancelar</button>
@@ -417,7 +417,7 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const DB = {
-      adminPassword: '1234',
+      adminPassword: 'Marquinhos',
       salonAddress: 'Rua Horácio Nóbrega, Centro - Patos / PB',
       googleMapsUrl: 'https://maps.google.com/?q=Patos+PB',
       services: [
