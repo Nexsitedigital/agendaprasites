@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -18,15 +18,9 @@
     }
 
     .glass-card {
-      background: rgba(22, 27, 34, 0.75);
+      background: rgba(22, 27, 34, 0.85);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #fce96a 0%, #d97706 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .gold-button {
@@ -51,32 +45,34 @@
       background: rgba(251, 191, 36, 0.08);
     }
 
+    /* Cores atualizadas dos slots de horário */
     .slot-btn {
       transition: all 0.2s ease;
     }
-
+    .slot-btn.available {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
     .slot-btn.available:hover {
-      border-color: #fbbf24;
-      color: #fbbf24;
+      background-color: rgba(16, 185, 129, 0.2);
+      border-color: #34d399;
       transform: scale(1.03);
     }
-
     .slot-btn.selected {
       background-color: #fbbf24 !important;
       color: #000 !important;
       font-weight: 700;
       border-color: #fbbf24 !important;
     }
-
-    .slot-btn.occupied {
+    .slot-btn.occupied, .slot-btn.passed, .slot-btn.lunch {
       background-color: rgba(239, 68, 68, 0.1);
       color: #ef4444;
-      border-color: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.2);
       cursor: not-allowed;
-      text-decoration: line-through;
+      opacity: 0.7;
     }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -87,15 +83,12 @@
       background: #22272e;
       border-radius: 4px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #374151;
-    }
   </style>
 </head>
 <body class="min-h-screen pb-12">
 
-  <!-- TOP HEADER / NAV -->
-  <header class="sticky top-0 z-40 glass-card border-b border-gray-800">
+  <!-- TOP HEADER / NAV (FIXA NO TOPO) -->
+  <header class="sticky top-0 z-50 glass-card border-b border-gray-800 shadow-xl">
     <div class="max-w-6xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-bold">
@@ -111,7 +104,7 @@
   
       <!-- BOTÕES NAVEGAÇÃO -->
       <div class="flex items-center gap-2">
-        <div class="flex bg-gray-900/80 p-1.5 rounded-xl border border-gray-800">
+        <div class="flex bg-gray-900/90 p-1.5 rounded-xl border border-gray-800">
           <button id="tab-book-btn" onclick="switchTab('book')" class="px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all text-black bg-amber-400 shadow-lg">
             <i class="fa-solid fa-calendar-plus me-1.5"></i> Agendar
           </button>
@@ -129,12 +122,8 @@
   <!-- MAIN CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 mt-8">
 
-    <!-- =================================================== -->
-    <!-- VIEW: FAZER AGENDAMENTO                            -->
-    <!-- =================================================== -->
+    <!-- VIEW: FAZER AGENDAMENTO -->
     <div id="view-book" class="space-y-8">
-
-      <!-- BANNER DE BOAS-VINDAS COM IMAGEM E ENDEREÇO -->
       <div class="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden border border-amber-500/20">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           <div class="md:col-span-7 space-y-3 z-10">
@@ -166,7 +155,7 @@
         </div>
       </div>
 
-      <!-- PASSO 1: SELEÇÃO DE SERVIÇOS -->
+      <!-- PASSO 1: SERVIÇOS -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -175,60 +164,49 @@
           </h3>
           <span class="text-xs text-gray-400">Você pode escolher mais de um</span>
         </div>
-
-        <div id="services-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="services-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </section>
 
-      <!-- PASSO 2: SELEÇÃO DO PROFISSIONAL -->
+      <!-- PASSO 2: PROFISSIONAL -->
       <section class="space-y-4">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
           <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 text-sm flex items-center justify-center font-black">2</span>
           Escolha o Profissional
         </h3>
-
-        <div id="staff-container" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <!-- Injetado dinamicamente via JS -->
-        </div>
+        <div id="staff-container" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
       </section>
 
-      <!-- PASSO 3: DATA E HORÁRIO -->
+      <!-- PASSO 3: DATA E HORA -->
       <section class="space-y-4">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
           <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 text-sm flex items-center justify-center font-black">3</span>
           Selecione Data & Horário
         </h3>
-
         <div class="glass-card p-5 rounded-xl space-y-5">
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-800">
             <div>
               <label class="block text-xs font-semibold text-gray-400 mb-1">Data do Atendimento</label>
               <input type="date" id="booking-date" onchange="renderSlots()" class="bg-gray-900 border border-gray-700 text-white text-sm rounded-lg p-2.5 focus:border-amber-500 focus:outline-none">
             </div>
-            <div class="flex items-center gap-4 text-xs text-gray-400">
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500 inline-block"></span> Livre</span>
+            <div class="flex flex-wrap items-center gap-3 text-xs text-gray-400">
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Livre</span>
               <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Selecionado</span>
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500 inline-block"></span> Ocupado</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span> Indisponível / Almoço</span>
             </div>
           </div>
-
           <div>
-            <label class="block text-xs font-semibold text-gray-400 mb-3">Horários Disponíveis</label>
-            <div id="slots-container" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
-              <!-- Slots dinamicos -->
-            </div>
+            <label class="block text-xs font-semibold text-gray-400 mb-3">Horários Disponíveis (Expediente: 08:00 às 18:30 | Almoço: 12:00 às 13:30)</label>
+            <div id="slots-container" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5"></div>
           </div>
         </div>
       </section>
 
-      <!-- PASSO 4: DADOS DO CLIENTE & RESUMO -->
+      <!-- PASSO 4: DADOS -->
       <section class="space-y-4">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
           <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 text-sm flex items-center justify-center font-black">4</span>
           Seus Dados e Confirmação
         </h3>
-
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div class="md:col-span-7 glass-card p-5 rounded-xl space-y-4">
             <div>
@@ -241,11 +219,9 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-gray-300 mb-1">Observações (Opcional)</label>
-              <textarea id="client-notes" rows="2" placeholder="Ex: Prefiro atendimento silencioso, alergia a produtos..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-sm text-white focus:border-amber-500 focus:outline-none"></textarea>
+              <textarea id="client-notes" rows="2" placeholder="Ex: Prefiro atendimento silencioso..." class="w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-sm text-white focus:border-amber-500 focus:outline-none"></textarea>
             </div>
           </div>
-
-          <!-- RESUMO FIXO / CARD -->
           <div class="md:col-span-5 glass-card p-5 rounded-xl border-amber-500/30 flex flex-col justify-between space-y-4">
             <div>
               <h4 class="text-sm font-bold text-amber-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-800 flex items-center gap-2">
@@ -255,7 +231,6 @@
                 <p class="text-gray-500 italic">Nenhum serviço selecionado ainda.</p>
               </div>
             </div>
-
             <button onclick="confirmBooking()" class="w-full py-3.5 px-4 gold-button rounded-xl text-sm font-extrabold flex items-center justify-center gap-2 shadow-lg">
               <i class="fa-solid fa-check-circle text-base"></i> CONFIRMAR AGENDAMENTO
             </button>
@@ -263,32 +238,26 @@
         </div>
       </section>
 
-      <!-- SEÇÃO DE LOCALIZAÇÃO / GOOGLE MAPS -->
+      <!-- LOCALIZAÇÃO -->
       <section id="section-location" class="glass-card rounded-2xl p-6 space-y-4 border-gray-800">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
               <i class="fa-solid fa-map-location-dot text-amber-400"></i> Nossa Localização
             </h3>
-            <p class="text-xs text-gray-400" id="location-address-display">Carregando endereço...</p>
+            <p class="text-xs text-gray-400" id="location-address-display">Rua Horácio Nóbrega, Centro - Patos / PB</p>
           </div>
           <button onclick="openExternalMaps()" class="gold-button px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 whitespace-nowrap shadow-md">
             <i class="fa-solid fa-diamond-turn-right"></i> ABRIR NO GOOGLE MAPS / GPS
           </button>
         </div>
-
-        <!-- IFRAME MAPS -->
         <div class="w-full h-64 md:h-80 rounded-xl overflow-hidden border border-gray-800 shadow-inner">
-          <iframe id="google-maps-iframe" class="w-full h-full border-0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.123456789!2d-37.27!3d-7.02!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDEnMTIuMCJTIDM3wrAxNicxMi4wIlc!5e0!3m2!1spt-BR!2sbr!4v1600000000000"></iframe>
+          <iframe id="google-maps-iframe" class="w-full h-full border-0" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.123456789!2d-37.27!3d-7.02!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDEnMTIuMCJTIDM3wrAxNicxMi4wIlc!5e0!3m2!1spt-BR!2sbr!4v1600000000000"></iframe>
         </div>
       </section>
-
     </div>
 
-
-    <!-- =================================================== -->
-    <!-- VIEW: ÁREA DO CLIENTE (LOGIN POR TELEFONE)          -->
-    <!-- =================================================== -->
+    <!-- VIEW: ÁREA DO CLIENTE -->
     <div id="view-client" class="hidden space-y-6 max-w-xl mx-auto">
       <div class="glass-card rounded-2xl p-6 md:p-8 space-y-6 border-amber-500/30">
         <div class="text-center space-y-2">
@@ -298,7 +267,6 @@
           <h2 class="text-xl font-bold text-white" id="client-area-title">Identificação do Cliente</h2>
           <p class="text-xs text-gray-400" id="client-area-desc">Digite seu número de telefone para consultar seus agendamentos</p>
         </div>
-
         <div id="client-login-panel" class="space-y-4">
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-1">Seu Telefone / WhatsApp</label>
@@ -308,7 +276,6 @@
             ACESSAR MEUS AGENDAMENTOS
           </button>
         </div>
-
         <div id="client-dashboard-panel" class="hidden space-y-4">
           <div class="flex items-center justify-between p-3 bg-gray-900/90 rounded-xl border border-gray-800">
             <div>
@@ -317,22 +284,14 @@
             </div>
             <button onclick="logoutClient()" class="text-xs text-red-400 hover:text-red-300 underline font-semibold">Sair</button>
           </div>
-
           <h3 class="text-sm font-bold text-white pt-2">Seus Agendamentos Realizados:</h3>
-          <div id="client-appointments-list" class="space-y-3">
-            <!-- Injetado via JS -->
-          </div>
+          <div id="client-appointments-list" class="space-y-3"></div>
         </div>
       </div>
     </div>
 
-
-    <!-- =================================================== -->
-    <!-- VIEW: ADMIN / SALÃO (GERENCIAMENTO)                 -->
-    <!-- =================================================== -->
+    <!-- VIEW: ADMIN / SALÃO -->
     <div id="view-admin" class="hidden space-y-8">
-      
-      <!-- DASHBOARD ESTATÍSTICO -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="glass-card p-5 rounded-xl border-l-4 border-l-amber-500">
           <p class="text-xs font-semibold text-gray-400">Total Agendamentos</p>
@@ -352,7 +311,6 @@
         </div>
       </div>
 
-      <!-- PAINEL DE GESTÃO DE AGENDAMENTOS -->
       <div class="glass-card rounded-2xl p-6 space-y-6">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-800">
           <div>
@@ -361,8 +319,6 @@
             </h2>
             <p class="text-xs text-gray-400">Gerencie todos os horários marcados em tempo real</p>
           </div>
-
-          <!-- FILTROS -->
           <div class="flex flex-wrap items-center gap-3">
             <input type="date" id="admin-filter-date" onchange="renderAdminTable()" class="bg-gray-900 border border-gray-800 text-xs text-white rounded-lg p-2.5 focus:border-amber-500 focus:outline-none">
             <select id="admin-filter-staff" onchange="renderAdminTable()" class="bg-gray-900 border border-gray-800 text-xs text-white rounded-lg p-2.5 focus:border-amber-500 focus:outline-none">
@@ -371,7 +327,6 @@
           </div>
         </div>
 
-        <!-- CONFIGURAÇÕES DE ENDEREÇO NO PAINEL ADMIN -->
         <div class="bg-gray-900/90 p-4 rounded-xl border border-gray-800 space-y-3">
           <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <i class="fa-solid fa-gear"></i> Configurações de Endereço do Salão
@@ -382,7 +337,7 @@
               <input type="text" id="admin-address-input" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white focus:border-amber-500 focus:outline-none">
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-gray-400 mb-1">Link do Google Maps (Compartilhar)</label>
+              <label class="block text-[11px] font-semibold text-gray-400 mb-1">Link do Google Maps</label>
               <input type="text" id="admin-map-link-input" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white focus:border-amber-500 focus:outline-none">
             </div>
           </div>
@@ -391,7 +346,6 @@
           </button>
         </div>
 
-        <!-- TABELA DE AGENDAMENTOS -->
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-gray-300">
             <thead class="bg-gray-900/80 text-gray-400 uppercase font-bold border-b border-gray-800">
@@ -405,18 +359,14 @@
                 <th class="p-3 text-right">Ações</th>
               </tr>
             </thead>
-            <tbody id="admin-table-body" class="divide-y divide-gray-800/60">
-              <!-- Injetado dinamicamente -->
-            </tbody>
+            <tbody id="admin-table-body" class="divide-y divide-gray-800/60"></tbody>
           </table>
         </div>
       </div>
-
     </div>
-
   </main>
 
-  <!-- MODAL DE SENHA DO PAINEL ADMIN -->
+  <!-- MODAL SENHA ADMIN -->
   <div id="modal-admin-pass" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="glass-card max-w-sm w-full rounded-2xl p-6 space-y-4 border-amber-500/40 relative text-center">
       <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center mx-auto text-xl">
@@ -427,20 +377,16 @@
         <p class="text-xs text-gray-400 mt-1">Digite a senha administrativa para acessar</p>
       </div>
       <div>
-        <input type="password" id="admin-password-input" placeholder="Digite a senha (padrão: 1234)" class="w-full text-center bg-gray-900 border border-gray-800 rounded-xl p-3 text-sm text-white focus:border-amber-500 focus:outline-none tracking-widest">
+        <input type="password" id="admin-password-input" placeholder="Senha (padrão:2026)" class="w-full text-center bg-gray-900 border border-gray-800 rounded-xl p-3 text-sm text-white focus:border-amber-500 focus:outline-none tracking-widest">
       </div>
       <div class="flex gap-2">
-        <button onclick="closeAdminModal()" class="w-1/2 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-xs">
-          Cancelar
-        </button>
-        <button onclick="verifyAdminPassword()" class="w-1/2 py-2.5 gold-button rounded-xl text-xs font-bold">
-          Entrar
-        </button>
+        <button onclick="closeAdminModal()" class="w-1/2 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-xs">Cancelar</button>
+        <button onclick="verifyAdminPassword()" class="w-1/2 py-2.5 gold-button rounded-xl text-xs font-bold">Entrar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL DE SUCESSO DO CLIENTE -->
+  <!-- MODAL SUCESSO -->
   <div id="modal-success" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="glass-card max-w-md w-full rounded-2xl p-6 text-center space-y-5 border-amber-500/40 relative">
       <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">
@@ -450,42 +396,34 @@
         <h3 class="text-xl font-extrabold text-white">Agendamento Realizado!</h3>
         <p class="text-xs text-gray-400 mt-1">Seu horário foi reservado no sistema.</p>
       </div>
-
-      <div id="modal-details" class="bg-gray-900/90 p-4 rounded-xl text-left text-xs space-y-2 border border-gray-800">
-        <!-- Detalhes -->
-      </div>
-
+      <div id="modal-details" class="bg-gray-900/90 p-4 rounded-xl text-left text-xs space-y-2 border border-gray-800"></div>
       <div class="space-y-2">
         <button id="btn-whatsapp-send" onclick="sendWhatsAppNotify()" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-lg">
           <i class="fa-brands fa-whatsapp text-lg"></i> NOTIFICAR SALÃO VIA WHATSAPP
         </button>
-        <button onclick="closeModal()" class="w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-xs">
-          Fechar
-        </button>
+        <button onclick="closeModal()" class="w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold rounded-xl text-xs">Fechar</button>
       </div>
     </div>
   </div>
 
-
   <!-- JAVASCRIPT COM SUPABASE INTEGRADO -->
   <script>
-    // ==========================================================
+    // ==========================================
     // COLE SUAS CREDENCIAIS DO SUPABASE ABAIXO:
-    // ==========================================================
+    // ==========================================
     const SUPABASE_URL = 'https://qbascskxakxqjplzsbxp.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_R8DQVz6NUKVBqsJ4AcxYIw_FHui7d_p'; // Ex: sb_publishable_...
+    const SUPABASE_ANON_KEY = 'sb_publishable_R8DQVz6NUKVBqsJ4AcxYIw_FHui7d_p';
 
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // DATA STORE INITIALIZATION
     const DB = {
       adminPassword: '1234',
       salonAddress: 'Rua Horácio Nóbrega, Centro - Patos / PB',
       googleMapsUrl: 'https://maps.google.com/?q=Patos+PB',
       services: [
-        { id: 's1', name: 'Corte de Cabelo', duration: 45, price: 45.00, icon: 'fa-scissors' },
-        { id: 's2', name: 'Barba Terapia', duration: 30, price: 35.00, icon: 'fa-user' },
-        { id: 's3', name: 'Combo (Corte + Barba)', duration: 60, price: 70.00, icon: 'fa-crown' },
+        { id: 's1', name: 'Corte de Cabelo', duration: 45, price: 25.00, icon: 'fa-scissors' },
+        { id: 's2', name: 'Barba Terapia', duration: 30, price: 20.00, icon: 'fa-user' },
+        { id: 's3', name: 'Combo (Corte + Barba)', duration: 60, price: 50.00, icon: 'fa-crown' },
         { id: 's4', name: 'Escova & Penteado', duration: 45, price: 60.00, icon: 'fa-wand-magic-sparkles' },
         { id: 's5', name: 'Coloração / Luzes', duration: 90, price: 120.00, icon: 'fa-paint-brush' }
       ],
@@ -497,10 +435,9 @@
       ],
       salonPhone: '5583999999999',
       openingHour: 8,
-      closingHour: 19
+      closingHour: 18.5 // 18:30 encerramento
     };
 
-    // STATE
     let selectedServices = [];
     let selectedStaffId = 'st1';
     let selectedTime = null;
@@ -508,7 +445,6 @@
     let currentCreatedBooking = null;
     let loggedClientPhone = null;
 
-    // INITIALIZATION ON LOAD
     window.addEventListener('DOMContentLoaded', () => {
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('booking-date').value = today;
@@ -531,7 +467,6 @@
         .subscribe();
     });
 
-    // CARREGAR AGENDAMENTOS DO SUPABASE
     async function loadBookings() {
       try {
         const { data, error } = await _supabase.from('bookings').select('*');
@@ -561,7 +496,6 @@
       }
     }
 
-    // SALVAR NOVO AGENDAMENTO NO SUPABASE
     async function saveBookingToCloud(newBooking) {
       try {
         const { error } = await _supabase.from('bookings').insert([{
@@ -585,7 +519,6 @@
       }
     }
 
-    // ATUALIZAR STATUS NA NUVEM
     async function updateBookingStatusInCloud(id, newStatus) {
       try {
         const { error } = await _supabase.from('bookings').update({ status: newStatus }).eq('id', id);
@@ -596,7 +529,6 @@
       }
     }
 
-    // EXCLUIR DA NUVEM
     async function deleteBookingFromCloud(id) {
       try {
         const { error } = await _supabase.from('bookings').delete().eq('id', id);
@@ -607,7 +539,6 @@
       }
     }
 
-    // CARREGAR/SALVAR CONFIGURAÇÕES DE ENDEREÇO
     function loadSettings() {
       const savedAddress = localStorage.getItem('golden_salon_address');
       const savedMapUrl = localStorage.getItem('golden_salon_map_url');
@@ -618,15 +549,12 @@
     function saveSalonSettings() {
       const newAddress = document.getElementById('admin-address-input').value.trim();
       const newMapUrl = document.getElementById('admin-map-link-input').value.trim();
-
       if (newAddress) DB.salonAddress = newAddress;
       if (newMapUrl) DB.googleMapsUrl = newMapUrl;
-
       localStorage.setItem('golden_salon_address', DB.salonAddress);
       localStorage.setItem('golden_salon_map_url', DB.googleMapsUrl);
-
       updateLocationDisplay();
-      alert('Configurações de endereço salvas com sucesso!');
+      alert('Configurações salvas com sucesso!');
     }
 
     function updateLocationDisplay() {
@@ -640,12 +568,10 @@
       window.open(DB.googleMapsUrl, '_blank');
     }
 
-    // TAB SWITCHING
     function switchTab(viewName) {
       const bookView = document.getElementById('view-book');
       const clientView = document.getElementById('view-client');
       const adminView = document.getElementById('view-admin');
-
       const bookBtn = document.getElementById('tab-book-btn');
       const clientBtn = document.getElementById('tab-client-btn');
       const adminBtn = document.getElementById('tab-admin-btn');
@@ -671,22 +597,18 @@
       }
     }
 
-    // AUTH CLIENTE POR TELEFONE
     function loginClientByPhone() {
       const phoneInput = document.getElementById('auth-phone-input').value.trim();
       if (!phoneInput || phoneInput.length < 8) {
         alert('Por favor, informe um número de telefone válido.');
         return;
       }
-
       loggedClientPhone = phoneInput;
       document.getElementById('logged-phone-display').innerText = phoneInput;
-
       document.getElementById('client-login-panel').classList.add('hidden');
       document.getElementById('client-dashboard-panel').classList.remove('hidden');
       document.getElementById('client-area-title').innerText = 'Seus Agendamentos';
       document.getElementById('client-area-desc').innerText = 'Histórico de horários vinculados ao seu número';
-
       renderClientAppointments();
     }
 
@@ -704,11 +626,7 @@
       const userBookings = bookings.filter(b => b.clientPhone.includes(loggedClientPhone) || loggedClientPhone.includes(b.clientPhone));
 
       if (userBookings.length === 0) {
-        container.innerHTML = `
-          <div class="p-6 text-center text-gray-500 text-xs italic glass-card rounded-xl">
-            Nenhum agendamento encontrado para este número.
-          </div>
-        `;
+        container.innerHTML = `<div class="p-6 text-center text-gray-500 text-xs italic glass-card rounded-xl">Nenhum agendamento encontrado para este número.</div>`;
         return;
       }
 
@@ -731,7 +649,6 @@
       }).join('');
     }
 
-    // AUTH ADMIN (SENHA)
     function requestAdminAccess() {
       document.getElementById('modal-admin-pass').classList.remove('hidden');
       document.getElementById('admin-password-input').focus();
@@ -748,12 +665,11 @@
         closeAdminModal();
         switchTab('admin');
       } else {
-        alert('Senha incorreta! Tente novamente.');
+        alert('Senha incorreta!');
         document.getElementById('admin-password-input').value = '';
       }
     }
 
-    // RENDER SERVICES
     function renderServices() {
       const container = document.getElementById('services-container');
       container.innerHTML = DB.services.map(s => {
@@ -771,9 +687,7 @@
             </div>
             <div class="text-right">
               <span class="text-sm font-extrabold text-amber-400">R$ ${s.price.toFixed(2)}</span>
-              <div class="mt-1">
-                <input type="checkbox" ${isSelected ? 'checked' : ''} class="accent-amber-400 rounded">
-              </div>
+              <div class="mt-1"><input type="checkbox" ${isSelected ? 'checked' : ''} class="accent-amber-400 rounded"></div>
             </div>
           </div>
         `;
@@ -784,23 +698,19 @@
     function toggleService(id) {
       const service = DB.services.find(s => s.id === id);
       const index = selectedServices.findIndex(s => s.id === id);
-      if (index > -1) {
-        selectedServices.splice(index, 1);
-      } else {
-        selectedServices.push(service);
-      }
+      if (index > -1) selectedServices.splice(index, 1);
+      else selectedServices.push(service);
       renderServices();
       renderSlots();
     }
 
-    // RENDER STAFF
     function renderStaff() {
       const container = document.getElementById('staff-container');
       container.innerHTML = DB.staff.map(st => {
         const isSelected = selectedStaffId === st.id;
         return `
-          <div onclick="selectStaff('${st.id}')" class="p-3 rounded-xl glass-card border cursor-pointer text-center transition-all ${isSelected ? 'border-amber-400 bg-amber-400/10' : 'border-gray-800 hover:border-gray-700'}">
-            <img src="${st.avatar}" alt="${st.name}" class="w-12 h-12 rounded-full mx-auto object-cover mb-2 border-2 ${isSelected ? 'border-amber-400' : 'border-gray-700'}">
+          <div onclick="selectStaff('${st.id}')" id="staff-card-${st.id}" class="p-3 rounded-xl glass-card border cursor-pointer text-center transition-all ${isSelected ? 'border-emerald-500 bg-emerald-500/10' : 'border-gray-800 hover:border-gray-700'}">
+            <img src="${st.avatar}" alt="${st.name}" class="w-12 h-12 rounded-full mx-auto object-cover mb-2 border-2 ${isSelected ? 'border-emerald-500' : 'border-gray-700'}">
             <h4 class="text-xs font-bold text-white truncate">${st.name}</h4>
             <p class="text-[10px] text-gray-400 truncate">${st.role}</p>
           </div>
@@ -815,7 +725,7 @@
       updateSummary();
     }
 
-    // CALCULATE & RENDER TIME SLOTS
+    // RENDER SLOTS COM BLOQUEIO DE PASSADOS, ALMOÇO E FIM (18:30)
     function renderSlots() {
       const container = document.getElementById('slots-container');
       const dateInput = document.getElementById('booking-date').value;
@@ -827,26 +737,44 @@
       }
 
       const slots = [];
-      for (let hour = DB.openingHour; hour < DB.closingHour; hour++) {
-        slots.push(`${String(hour).padStart(2, '0')}:00`);
-        slots.push(`${String(hour).padStart(2, '0')}:30`);
+      for (let hour = 8; hour < 18.5; hour += 0.5) {
+        const h = Math.floor(hour);
+        const m = (hour % 1 === 0) ? '00' : '30';
+        slots.push(`${String(h).padStart(2, '0')}:${m}`);
       }
 
       const dayBookings = bookings.filter(b => b.date === dateInput && b.status !== 'Cancelado');
+      const now = new Date();
+      const isToday = dateInput === now.toISOString().split('T')[0];
+      const currentHourMinutes = now.getHours() * 60 + now.getMinutes();
 
       container.innerHTML = slots.map(time => {
+        const [hStr, mStr] = time.split(':');
+        const slotMinutes = parseInt(hStr) * 60 + parseInt(mStr);
+
+        // Verificação de Horário de Almoço (12:00 até 13:30)
+        const isLunchTime = slotMinutes >= 720 && slotMinutes < 810; // 12:00 a 13:30
+
+        // Verificação se o horário já passou (caso seja hoje)
+        const isPassed = isToday && slotMinutes <= currentHourMinutes;
+
+        // Verificação se já está ocupado por outro agendamento
         const isOccupied = dayBookings.some(b => {
-          if (selectedStaffId !== 'st1' && b.staffId !== 'st1' && b.staffId !== selectedStaffId) {
-            return false;
-          }
+          if (selectedStaffId !== 'st1' && b.staffId !== 'st1' && b.staffId !== selectedStaffId) return false;
           return b.time === time;
         });
 
+        if (isLunchTime) {
+          return `<button disabled class="slot-btn lunch py-2 px-3 rounded-lg text-xs font-medium text-center" title="Horário de Almoço">${time} (Almoço)</button>`;
+        }
+        if (isPassed) {
+          return `<button disabled class="slot-btn passed py-2 px-3 rounded-lg text-xs font-medium text-center" title="Horário passado">${time} (Passado)</button>`;
+        }
         if (isOccupied) {
-          return `<button disabled class="slot-btn occupied py-2 px-3 rounded-lg text-xs font-medium border text-center">${time}</button>`;
+          return `<button disabled class="slot-btn occupied py-2 px-3 rounded-lg text-xs font-medium text-center" title="Ocupado">${time} (Ocupado)</button>`;
         }
 
-        return `<button onclick="selectTime('${time}')" class="slot-btn available border border-gray-800 bg-gray-900 text-gray-300 py-2 px-3 rounded-lg text-xs font-medium text-center" id="slot-${time.replace(':', '')}">${time}</button>`;
+        return `<button onclick="selectTime('${time}')" class="slot-btn available py-2 px-3 rounded-lg text-xs font-semibold text-center" id="slot-${time.replace(':', '')}">${time}</button>`;
       }).join('');
 
       updateSummary();
@@ -860,7 +788,6 @@
       updateSummary();
     }
 
-    // UPDATE SUMMARY CARD
     function updateSummary() {
       const container = document.getElementById('summary-content');
       const totalDuration = selectedServices.reduce((acc, s) => acc + s.duration, 0);
@@ -878,10 +805,10 @@
       container.innerHTML = `
         <div class="space-y-1.5">
           <p><strong class="text-gray-400">Serviços:</strong> <span class="text-white">${selectedServices.map(s => s.name).join(', ')}</span></p>
-          <p><strong class="text-gray-400">Profissional:</strong> <span class="text-amber-400 font-semibold">${staff ? staff.name : '-'}</span></p>
+          <p><strong class="text-gray-400">Profissional:</strong> <span class="text-emerald-400 font-semibold">${staff ? staff.name : '-'}</span></p>
           <p><strong class="text-gray-400">Data:</strong> <span class="text-white">${formattedDate}</span></p>
           <p><strong class="text-gray-400">Horário:</strong> <span class="text-amber-400 font-bold">${selectedTime || 'Selecione abaixo'}</span></p>
-          <p><strong class="text-gray-400">Duração Estimada:</strong> <span class="text-white">${totalDuration} minutos</span></p>
+          <p><strong class="text-gray-400">Duração:</strong> <span class="text-white">${totalDuration} minutos</span></p>
           <div class="pt-2 border-t border-gray-800 flex justify-between items-center text-sm">
             <span class="font-bold text-gray-300">Total:</span>
             <span class="text-lg font-black text-amber-400">R$ ${totalPrice.toFixed(2)}</span>
@@ -890,7 +817,6 @@
       `;
     }
 
-    // CONFIRM BOOKING
     function confirmBooking() {
       const name = document.getElementById('client-name').value.trim();
       const phone = document.getElementById('client-phone').value.trim();
@@ -898,15 +824,15 @@
       const date = document.getElementById('booking-date').value;
 
       if (selectedServices.length === 0) {
-        alert('Por favor, selecione pelo menos um serviço.');
+        alert('Selecione pelo menos um serviço.');
         return;
       }
       if (!selectedTime) {
-        alert('Por favor, escolha um horário disponível.');
+        alert('Escolha um horário.');
         return;
       }
       if (!name || !phone) {
-        alert('Por favor, preencha seu Nome e Telefone/WhatsApp.');
+        alert('Preencha seu Nome e Telefone/WhatsApp.');
         return;
       }
 
@@ -943,7 +869,6 @@
       showSuccessModal(newBooking);
     }
 
-    // SUCCESS MODAL & WHATSAPP
     function showSuccessModal(booking) {
       const modal = document.getElementById('modal-success');
       const details = document.getElementById('modal-details');
@@ -955,10 +880,8 @@
         <p><strong class="text-gray-400">Serviços:</strong> ${booking.services.map(s => s.name).join(', ')}</p>
         <p><strong class="text-gray-400">Profissional:</strong> ${booking.staffName}</p>
         <p><strong class="text-gray-400">Data e Hora:</strong> ${formattedDate} às ${booking.time}</p>
-        <p><strong class="text-gray-400">Valor Total:</strong> R$ ${booking.totalPrice.toFixed(2)}</p>
-        <p class="pt-1 text-[11px] text-gray-400 border-t border-gray-800 mt-2"><i class="fa-solid fa-location-dot me-1 text-amber-400"></i> ${DB.salonAddress}</p>
+        <p><strong class="text-gray-400">Total:</strong> R$ ${booking.totalPrice.toFixed(2)}</p>
       `;
-
       modal.classList.remove('hidden');
     }
 
@@ -970,7 +893,6 @@
       if (!currentCreatedBooking) return;
       const b = currentCreatedBooking;
       const formattedDate = new Date(b.date + 'T00:00:00').toLocaleDateString('pt-BR');
-      
       const text = `Olá! Fiz um agendamento no site NEXSITE:%0A%0A` +
         `*Código:* ${b.id}%0A` +
         `*Cliente:* ${b.clientName}%0A` +
@@ -978,13 +900,10 @@
         `*Serviços:* ${b.services.map(s => s.name).join(', ')}%0A` +
         `*Profissional:* ${b.staffName}%0A` +
         `*Data:* ${formattedDate} às ${b.time}%0A` +
-        `*Valor Total:* R$ ${b.totalPrice.toFixed(2)}%0A%0A` +
-        `Gostaria de confirmar minha reserva!`;
-
+        `*Valor:* R$ ${b.totalPrice.toFixed(2)}`;
       window.open(`https://wa.me/${DB.salonPhone}?text=${text}`, '_blank');
     }
 
-    // ADMIN PANEL RENDER & FILTERS
     function populateAdminFilters() {
       const select = document.getElementById('admin-filter-staff');
       select.innerHTML = '<option value="all">Todos Profissionais</option>' + 
@@ -997,39 +916,25 @@
       const filterStaff = document.getElementById('admin-filter-staff').value;
 
       let filtered = bookings;
-
-      if (filterDate) {
-        filtered = filtered.filter(b => b.date === filterDate);
-      }
-      if (filterStaff !== 'all') {
-        filtered = filtered.filter(b => b.staffId === filterStaff);
-      }
+      if (filterDate) filtered = filtered.filter(b => b.date === filterDate);
+      if (filterStaff !== 'all') filtered = filtered.filter(b => b.staffId === filterStaff);
 
       document.getElementById('stat-total').innerText = filtered.length;
       document.getElementById('stat-confirmed').innerText = filtered.filter(b => b.status === 'Confirmado').length;
       
-      const totalRev = filtered
-        .filter(b => b.status !== 'Cancelado')
-        .reduce((acc, b) => acc + b.totalPrice, 0);
+      const totalRev = filtered.filter(b => b.status !== 'Cancelado').reduce((acc, b) => acc + b.totalPrice, 0);
       document.getElementById('stat-revenue').innerText = `R$ ${totalRev.toFixed(2)}`;
 
       if (filtered.length > 0) {
         const counts = {};
         filtered.forEach(b => counts[b.staffName] = (counts[b.staffName] || 0) + 1);
-        const top = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-        document.getElementById('stat-top-staff').innerText = top;
+        document.getElementById('stat-top-staff').innerText = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
       } else {
         document.getElementById('stat-top-staff').innerText = '-';
       }
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" class="p-8 text-center text-gray-500 italic">
-              Nenhum agendamento encontrado para esta data ou filtro.
-            </td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-gray-500 italic">Nenhum agendamento encontrado.</td></tr>`;
         return;
       }
 
@@ -1039,43 +944,19 @@
           'Concluído': 'bg-blue-500/10 text-blue-400 border-blue-500/30',
           'Cancelado': 'bg-red-500/10 text-red-400 border-red-500/30'
         };
-
         const formattedDate = new Date(b.date + 'T00:00:00').toLocaleDateString('pt-BR');
-
         return `
           <tr class="hover:bg-gray-900/50 transition-colors">
-            <td class="p-3">
-              <span class="font-bold text-white block">${b.time}</span>
-              <span class="text-[10px] text-gray-500">${formattedDate}</span>
-            </td>
-            <td class="p-3">
-              <span class="font-semibold text-white block">${b.clientName}</span>
-              <span class="text-[10px] text-gray-400">${b.clientPhone}</span>
-            </td>
-            <td class="p-3 font-medium text-gray-300">
-              ${b.services.map(s => s.name).join(', ')}
-            </td>
-            <td class="p-3 text-amber-400 font-semibold">
-              ${b.staffName}
-            </td>
-            <td class="p-3 font-extrabold text-white">
-              R$ ${b.totalPrice.toFixed(2)}
-            </td>
-            <td class="p-3">
-              <span class="px-2 py-1 rounded-md text-[10px] font-bold border ${statusColors[b.status] || 'bg-gray-800 text-gray-300'}">
-                ${b.status}
-              </span>
-            </td>
+            <td class="p-3"><span class="font-bold text-white block">${b.time}</span><span class="text-[10px] text-gray-500">${formattedDate}</span></td>
+            <td class="p-3"><span class="font-semibold text-white block">${b.clientName}</span><span class="text-[10px] text-gray-400">${b.clientPhone}</span></td>
+            <td class="p-3 font-medium text-gray-300">${b.services.map(s => s.name).join(', ')}</td>
+            <td class="p-3 text-amber-400 font-semibold">${b.staffName}</td>
+            <td class="p-3 font-extrabold text-white">R$ ${b.totalPrice.toFixed(2)}</td>
+            <td class="p-3"><span class="px-2 py-1 rounded-md text-[10px] font-bold border ${statusColors[b.status]}">${b.status}</span></td>
             <td class="p-3 text-right space-x-1">
-              <button onclick="updateBookingStatusInCloud('${b.id}', 'Concluído')" title="Marcar como Concluído" class="p-1.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white rounded-lg transition-all">
-                <i class="fa-solid fa-check"></i>
-              </button>
-              <button onclick="updateBookingStatusInCloud('${b.id}', 'Cancelado')" title="Cancelar" class="p-1.5 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-lg transition-all">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-              <button onclick="deleteBookingFromCloud('${b.id}')" title="Excluir" class="p-1.5 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white rounded-lg transition-all">
-                <i class="fa-solid fa-trash"></i>
-              </button>
+              <button onclick="updateBookingStatusInCloud('${b.id}', 'Concluído')" title="Concluir" class="p-1.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white rounded-lg"><i class="fa-solid fa-check"></i></button>
+              <button onclick="updateBookingStatusInCloud('${b.id}', 'Cancelado')" title="Cancelar" class="p-1.5 bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white rounded-lg"><i class="fa-solid fa-xmark"></i></button>
+              <button onclick="deleteBookingFromCloud('${b.id}')" title="Excluir" class="p-1.5 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white rounded-lg"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         `;
